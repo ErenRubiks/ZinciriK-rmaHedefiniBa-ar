@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zinciri Kırma</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff; /* Beyaz arka plan */
+            color: #000; /* Siyah metin rengi */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Alt menü altındaki beyazlığı engellemek için */
+        }
+
+        .form-container {
+            background-color: #f2f2f2; /* Açık gri form arka plan */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-container h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-container p {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .motivational-quote {
+            font-size: 20px;
+            color: #333;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f8f8;
+            border-radius: 10px;
+        }
+
+        .bottom-menu {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            background-color: #000; /* Siyah alt menü arka planı */
+            padding: 10px 0;
+        }
+
+        .bottom-menu button {
+            background-color: transparent;
+            border: none;
+            font-size: 30px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .bottom-menu button:hover {
+            color: #007BFF;
+        }
+
+        .icon {
+            font-size: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h1>Zinciri Kırma</h1>
+        <p>Hedef: <span id="goalName">Hedef Adı Yok</span></p>
+        <p>Bugün Bitmesine Kalan Süre: <span id="timeLeft">0</span></p>
+        <p>Hedeflenen Gün Sayısı: <span id="goalDays">0</span></p>
+
+        <!-- Motivasyon Sözleri -->
+        <div id="quoteContainer" class="motivational-quote">Günlük motivasyon sözünüz burada olacak.</div>
+    </div>
+
+    <!-- Bottom Menu with Icons -->
+    <div class="bottom-menu">
+        <button onclick="goHome()">
+            <span class="icon">&#127968;</span> <!-- Ev Ikonu -->
+        </button>
+        <button onclick="goToCreatePage()">
+            <span class="icon">+</span> <!-- Artı Ikonu -->
+        </button>
+    </div>
+
+    <script>
+        // Motivasyon Sözleri Listesi
+        const quotes = [
+            "Başarının sırrı, başladığın işi bitirmektir.",
+            "Bugün, dün yapmadığın şeyleri yapma fırsatıdır.",
+            "Küçük adımlar büyük başarıların başlangıcıdır.",
+            "İnandığın şey için her gün bir adım at.",
+            "Zorluklar seni engellemeye çalışabilir, ama sen onları aşabilirsin.",
+            "Hayatta en önemli şey, ne kadar güçlü olduğun değil, ne kadar düşersen düş, tekrar kalkabilmendir.",
+            "Her gün yeni bir başlangıçtır.",
+            "Başarı, hazırlık ve fırsatın birleşimidir.",
+            "Hedefine her adımda daha da yaklaşıyorsun.",
+            "Hayatta en değerli şey, zamanıdır.",
+            "Her gün bir şeyler öğrenirsen, büyürsün.",
+            "Başarı, eylemde bulunmaktan gelir, sadece hayal etmekten değil.",
+            "Kendine inan, her şey mümkün.",
+            "Her şeyin en iyisini yapmaya çalış.",
+            "Birlikte başarmak, tek başına başarmaktan daha güçlüdür.",
+            "Bugün başladığın şeyin meyvesini, yarın alacaksın.",
+            "Yapabileceğin her şeyin en iyisini yap.",
+            "Başarı asla tesadüf değildir.",
+            "Bugün, dün yapılmadığı kadar harika bir gün olacak.",
+            "Hedeflerine giden yol her zaman düz olmaz, ama devam etmelisin.",
+            "İyi işler her zaman zorluklarla gelir.",
+            "En büyük başarı, düşe kalka yükselmektir.",
+            "Hayat bir yolculuktur, her adımda öğren.",
+            "Başarı sadece başlangıçtır, hedefe odaklan.",
+            "Hayatını değiştirecek tek şey, kararındır.",
+            "Zihnindeki engelleri yık, ve hayatını özgür bırak.",
+            "Hedef koy ve onlara odaklan.",
+            "Zorluklar, seni güçlü kılmak için vardır.",
+            "Her şey senin elinde.",
+            "Hayal et, planla ve harekete geç.",
+            "Başarı, sabır ve çabanın birleşimidir.",
+            "Başarı, bir yolculuktur, varılacak bir nokta değildir.",
+            "Başarısızlık, daha iyi bir şansa açılan kapıdır.",
+            "Hayatını değiştiren tek şey, harekete geçmendir.",
+            "En büyük engel, senin aklındaki engeldir.",
+            "Her şey mümkün, yeter ki inan.",
+            "Başarı küçük adımların birleşimidir.",
+            "Hayat kısa, senin başarın sonsuz olabilir.",
+            "Eylemler hedeflerinizi oluşturur.",
+            "Bugün, daha iyi bir versiyonunu yaratmak için bir fırsattır.",
+            "Her hedef, küçük bir adım ile başlar.",
+            "Başarı, cesur olabilmekle gelir.",
+            "Güçlü ol, ve başarısızlık seni asla durdurmasın.",
+            "Sadece düşleyerek değil, eyleme geçerek başarıya ulaşabilirsin.",
+            "Korkuların, seni durdurmamalı.",
+            "Başarısızlık, yolun bir parçasıdır.",
+            "Her engel, seni daha güçlü kılacak bir fırsattır.",
+            "Bir şeyleri yapmak istiyorsan, önce kendine inanmalısın.",
+            "Hayat bir seçimdir, başarılı olmak senin elinde.",
+            "Başarı, hiç pes etmemektir.",
+            "Zamanı iyi kullan, başarını garanti et.",
+            "Her şeyin bir zamanı vardır, doğru zaman şimdi.",
+            "Başarı, sürekli çaba gerektirir."
+        ];
+
+        let currentQuoteIndex = 0;
+
+        // Her 10 saniyede bir yeni motivasyon sözü
+        function changeQuote() {
+            document.getElementById('quoteContainer').innerText = quotes[currentQuoteIndex];
+            currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+        }
+
+        setInterval(changeQuote, 10000); // 10 saniyede bir motivasyon sözü değişir
+        changeQuote(); // İlk sözü hemen göster
+
+        function goHome() {
+            window.location.href = "app.html"; 
+        }
+
+        function goToCreatePage() {
+            window.location.href = "appcreate.html"; 
+        }
+
+        window.onload = function() {
+            let goalName = localStorage.getItem('goalName');
+            let goalDays = localStorage.getItem('goalDays');
+            let goalDate = new Date(localStorage.getItem('goalDate'));
+            let dailyRoutine = localStorage.getItem('dailyRoutine');
+            
+            if (goalName && goalDays && goalDate && dailyRoutine) {
+                document.getElementById('goalName').textContent = goalName;
+                document.getElementById('goalDays').textContent = goalDays;
+
+                let currentDate = new Date();
+                let timeDiff = goalDate - currentDate;
+                let daysLeft = Math.floor(timeDiff / (1000 * 3600 * 24));
+
+                document.getElementById('timeLeft').textContent = daysLeft >= 0 ? daysLeft : 0;
+            }
+        }
+    </script>
+
+</body>
+</html>
+

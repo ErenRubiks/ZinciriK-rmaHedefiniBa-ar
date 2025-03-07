@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zinciri Kırma - Hedef Ekle</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff; /* Beyaz arka plan */
+            color: #000; /* Siyah metin rengi */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            background-color: #f2f2f2; /* Açık gri form arka plan */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .form-container h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-container input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .form-container input::placeholder {
+            color: #aaa;
+        }
+
+        .form-container button {
+            padding: 12px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 18px;
+        }
+
+        .form-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .bottom-menu {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            position: absolute;
+            bottom: 20px;
+            background-color: #000; /* Siyah alt menü arka planı */
+            padding: 10px 0;
+        }
+
+        .bottom-menu button {
+            background-color: transparent;
+            border: none;
+            font-size: 30px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .bottom-menu button:hover {
+            color: #007BFF;
+        }
+
+        .icon {
+            font-size: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h1>Hedef Sayfası</h1>
+
+        <!-- Hedef Adı -->
+        <label for="goalName">Hedef Adı:</label>
+        <input type="text" id="goalName" placeholder="Hedef Adını Girin" />
+
+        <!-- Günlük Rutin -->
+        <label for="dailyRoutine">Günlük Rutin:</label>
+        <input type="text" id="dailyRoutine" placeholder="Günlük yapmanız gereken rutin" />
+
+        <!-- Hedef Süresi -->
+        <label for="goalDays">Hedef Süresi (gün):</label>
+        <input type="number" id="goalDays" placeholder="Kaç Gün?" min="1" max="365" />
+
+        <!-- Kaydet Butonu -->
+        <button onclick="saveGoal()">Kaydet</button>
+    </div>
+
+    <!-- Bottom Menu with Icons -->
+    <div class="bottom-menu">
+        <button onclick="goHome()">
+            <span class="icon">&#127968;</span> <!-- Ev Ikonu -->
+        </button>
+        <button onclick="goToCreatePage()">
+            <span class="icon">+</span> <!-- Artı Ikonu -->
+        </button>
+    </div>
+
+    <script>
+        function saveGoal() {
+            const goalName = document.getElementById('goalName').value;
+            const dailyRoutine = document.getElementById('dailyRoutine').value;
+            let goalDays = document.getElementById('goalDays').value;
+
+            if (!goalName || !dailyRoutine || !goalDays) {
+                alert('Lütfen tüm alanları doldurun!');
+                return;
+            }
+
+            // Sadece sayılar kabul et
+            if (isNaN(goalDays) || goalDays < 1 || goalDays > 365) {
+                alert('Hedef süresi 1 ile 365 arasında olmalıdır.');
+                return;
+            }
+
+            // Kaydet
+            localStorage.setItem('goalName', goalName); // Hedef adı kaydediliyor
+            localStorage.setItem('goalDays', goalDays);
+            localStorage.setItem('goalDate', new Date().toString());
+            localStorage.setItem('dailyRoutine', dailyRoutine);  // Günlük rutini de kaydediyoruz
+
+            alert('Hedef başarıyla kaydedildi!');
+            window.location.href = "app.html"; 
+        }
+
+        function goHome() {
+            window.location.href = "app.html"; 
+        }
+
+        function goToCreatePage() {
+            window.location.href = "appcreate.html"; 
+        }
+    </script>
+
+</body>
+</html>
